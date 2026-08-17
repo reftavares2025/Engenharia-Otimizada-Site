@@ -16,9 +16,18 @@ interface Props {
   cameraPreset?: 'iso' | 'front' | 'top' | 'side';
 }
 
+const modelYOffsets: Record<Model3DType, number> = {
+  'chale-aframe': 0.675,
+  'chale-alpino': 0.55,
+  'galpao-industrial': 0.85,
+  'edificio-comercial': 0.85,
+  'modulo-pre-moldado': 1.2
+};
+
 function SceneRenderer({ modelType, controls, cameraPreset }: Props) {
   const controlsRef = useRef<OrbitControlsType>(null);
   const currentConfig = MODEL_3D_PRESETS.find((m) => m.id === modelType) || MODEL_3D_PRESETS[0];
+  const yOffset = modelYOffsets[modelType] || 0;
 
   // Camera presets adjustment
   useEffect(() => {
@@ -26,20 +35,20 @@ function SceneRenderer({ modelType, controls, cameraPreset }: Props) {
     const [cx, cy, cz] = currentConfig.cameraInitPos;
     const [tx, ty, tz] = currentConfig.cameraTarget;
 
-    controlsRef.current.target.set(tx, ty, tz);
+    controlsRef.current.target.set(tx, ty + yOffset, tz);
 
     if (cameraPreset === 'front') {
-      controlsRef.current.object.position.set(0, cy * 0.9, cz * 1.3);
+      controlsRef.current.object.position.set(0, (cy + yOffset) * 0.9, cz * 1.3);
     } else if (cameraPreset === 'top') {
-      controlsRef.current.object.position.set(0.01, cy * 2.2, 0.01);
+      controlsRef.current.object.position.set(0.01, (cy + yOffset) * 2.2, 0.01);
     } else if (cameraPreset === 'side') {
-      controlsRef.current.object.position.set(cx * 1.4, cy * 0.9, 0);
+      controlsRef.current.object.position.set(cx * 1.4, (cy + yOffset) * 0.9, 0);
     } else {
       // Default Isometric
-      controlsRef.current.object.position.set(cx, cy, cz);
+      controlsRef.current.object.position.set(cx, cy + yOffset, cz);
     }
     controlsRef.current.update();
-  }, [modelType, cameraPreset, currentConfig]);
+  }, [modelType, cameraPreset, currentConfig, yOffset]);
 
   return (
     <>
@@ -88,7 +97,7 @@ function SceneRenderer({ modelType, controls, cameraPreset }: Props) {
       />
 
       {/* Active 3D Model Geometry (Assented exactly at Ground Level Y = 0) */}
-      <group position={[0, 0, 0]}>
+      <group position={[0, yOffset, 0]}>
         {modelType === 'chale-aframe' && <ChaletAFrame3D controls={controls} />}
         {modelType === 'chale-alpino' && <ChaletAlpino3D controls={controls} />}
         {modelType === 'galpao-industrial' && <GalpaoIndustrial3D controls={controls} />}
