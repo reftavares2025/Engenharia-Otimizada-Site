@@ -11,7 +11,7 @@ const normalizeText = (text: string): string => {
     .toLowerCase();
 };
 
-// Component to highlight matched search terms in text
+// Component to highlight matched search terms in text safely without dynamic RegExp
 const HighlightedText: React.FC<{ text: string; search: string; className?: string }> = ({ text, search, className }) => {
   if (!search.trim()) {
     return <span className={className}>{text}</span>;
@@ -26,33 +26,62 @@ const HighlightedText: React.FC<{ text: string; search: string; className?: stri
     return <span className={className}>{text}</span>;
   }
 
-  // Create regex pattern to match any of the query terms (ignoring accents in matching)
-  // We build a regex with escaped characters
-  try {
-    const escapedTerms = queryTerms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-    const regex = new RegExp(`(${escapedTerms})`, 'gi');
-    const parts = text.split(regex);
+  // Find all matched intervals without using dynamic non-literal RegExp
+  const lowerText = text.toLowerCase();
+  const intervals: { start: number; end: number }[] = [];
 
-    return (
-      <span className={className}>
-        {parts.map((part, i) => {
-          const isMatch = queryTerms.some((term) => normalizeText(part) === normalizeText(term));
-          return isMatch ? (
-            <mark
-              key={i}
-              className="bg-amber-200/90 text-slate-950 font-bold px-1 py-0.5 rounded-md shadow-sm border border-amber-300/60"
-            >
-              {part}
-            </mark>
-          ) : (
-            <span key={i}>{part}</span>
-          );
-        })}
-      </span>
-    );
-  } catch {
+  for (const term of queryTerms) {
+    const lowerTerm = term.toLowerCase();
+    let startIndex = 0;
+    while ((startIndex = lowerText.indexOf(lowerTerm, startIndex)) !== -1) {
+      intervals.push({ start: startIndex, end: startIndex + lowerTerm.length });
+      startIndex += lowerTerm.length;
+    }
+  }
+
+  if (intervals.length === 0) {
     return <span className={className}>{text}</span>;
   }
+
+  // Merge overlapping intervals
+  intervals.sort((a, b) => a.start - b.start);
+  const merged: { start: number; end: number }[] = [];
+  let current = intervals[0];
+
+  for (let i = 1; i < intervals.length; i++) {
+    if (intervals[i].start <= current.end) {
+      current.end = Math.max(current.end, intervals[i].end);
+    } else {
+      merged.push(current);
+      current = intervals[i];
+    }
+  }
+  merged.push(current);
+
+  // Build rendered parts
+  const elements: React.ReactNode[] = [];
+  let lastIndex = 0;
+
+  merged.forEach((range, idx) => {
+    if (range.start > lastIndex) {
+      elements.push(<span key={`pre-${idx}`}>{text.slice(lastIndex, range.start)}</span>);
+    }
+    elements.push(
+      <mark
+        key={`match-${idx}`}
+        className="bg-amber-200/90 text-slate-950 font-bold px-1 py-0.5 rounded-md shadow-sm border border-amber-300/60"
+      >
+        {text.slice(range.start, range.end)}
+      </mark>
+    );
+    lastIndex = range.end;
+  });
+
+  if (lastIndex < text.length) {
+    elements.push(<span key="post">{text.slice(lastIndex)}</span>);
+  }
+
+  return <span className={className}>{elements}</span>;
 };
 
 export const FAQSection: React.FC = () => {
