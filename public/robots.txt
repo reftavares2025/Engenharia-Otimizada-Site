@@ -45,6 +45,6 @@ User-agent: FacebookBot
 Allow: /
 
 # Sitemaps e Arquivos de Contexto para IAs (LLMs.txt Standard)
-Sitemap: https://rtengenhariaotimizada.vercel.com.br/sitemap.xml
-# LLM Context: https://rtengenhariaotimizada.vercel.com.br/llms.txt
-# Full LLM Context: https://rtengenhariaotimizada.vercel.com.br/llms-full.txt
+Sitemap: https://rtengenharia.vercel.app/sitemap.xml
+# LLM Context: https://rtengenharia.vercel.app/llms.txt
+# Full LLM Context: https://rtengenharia.vercel.app/llms-full.txt
