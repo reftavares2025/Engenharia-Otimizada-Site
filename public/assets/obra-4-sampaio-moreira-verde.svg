@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <!-- Blue Sky -->
+  <rect width="1200" height="400" fill="#38bdf8"/>
+
+  <!-- Neighboring Buildings -->
+  <rect x="0" y="200" width="180" height="500" fill="#cbd5e1" stroke="#475569"/>
+  <rect x="900" y="250" width="300" height="450" fill="#e2e8f0" stroke="#64748b"/>
+
+  <!-- Main Structure Base (Concrete Gray) -->
+  <rect x="180" y="420" width="720" height="280" fill="#94a3b8" stroke="#475569" stroke-width="4"/>
+
+  <!-- Top Cladding - Turquoise Green Corrugated Metal Panels -->
+  <rect x="180" y="30" width="720" height="390" fill="#0d9488" stroke="#0f766e" stroke-width="4"/>
+
+  <!-- Corrugated Vertical Lines -->
+  <line x1="220" y1="30" x2="220" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="260" y1="30" x2="260" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="300" y1="30" x2="300" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="340" y1="30" x2="340" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="380" y1="30" x2="380" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="420" y1="30" x2="420" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="460" y1="30" x2="460" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="500" y1="30" x2="500" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="540" y1="30" x2="540" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="580" y1="30" x2="580" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="620" y1="30" x2="620" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="660" y1="30" x2="660" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="700" y1="30" x2="700" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="740" y1="30" x2="740" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="780" y1="30" x2="780" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="820" y1="30" x2="820" y2="420" stroke="#0f766e" stroke-width="3"/>
+  <line x1="860" y1="30" x2="860" y2="420" stroke="#0f766e" stroke-width="3"/>
+
+  <!-- Facade Inscription: R. SAMPAIO MOREIRA 200 -->
+  <text x="540" y="380" text-anchor="middle" fill="#ffffff" font-family="'Trebuchet MS', sans-serif" font-weight="900" font-size="28" letter-spacing="3">R. SAMPAIO MOREIRA 200</text>
+
+  <!-- Main Open Entrance Roll-Up Doorway -->
+  <rect x="440" y="460" width="200" height="240" fill="#1e293b"/>
+
+  <!-- Power Pole in Foreground -->
+  <rect x="260" y="100" width="28" height="600" fill="#475569"/>
+
+  <!-- Street & Parked Vehicles -->
+  <rect x="0" y="700" width="1200" height="100" fill="#334155"/>
+  <rect x="80" y="720" width="180" height="60" rx="15" fill="#f8fafc"/>
+
+  <!-- Watermark Badge -->
+  <rect x="20" y="20" width="380" height="45" rx="10" fill="#0f172a" opacity="0.85"/>
+  <text x="35" y="48" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="18">OBRA REAL: R. Sampaio Moreira 200</text>
+</svg>

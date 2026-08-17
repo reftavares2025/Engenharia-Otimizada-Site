@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <!-- Urban Background Roofs and Streets -->
+  <rect width="1200" height="800" fill="#94a3b8"/>
+  
+  <!-- Surrounding Tile Roofs -->
+  <polygon points="0,0 350,0 280,250 0,200" fill="#ea580c" stroke="#c2410c" stroke-width="2"/>
+  <polygon points="0,200 250,220 200,550 0,500" fill="#dc2626" stroke="#b91c1c" stroke-width="2"/>
+  <polygon points="850,500 1200,450 1200,800 800,800" fill="#c2410c" stroke="#9a3412" stroke-width="2"/>
+
+  <!-- Main Concrete Industrial Building (Perspective Aerial) -->
+  <polygon points="280,120 950,150 900,680 230,620" fill="#e2e8f0" stroke="#475569" stroke-width="5"/>
+
+  <!-- Building Roof Monitor / Shed Roof Structure -->
+  <polygon points="380,170 850,190 820,320 350,300" fill="#cbd5e1" stroke="#64748b" stroke-width="3"/>
+  <polygon points="350,300 820,320 800,380 330,360" fill="#1e293b" opacity="0.8"/>
+
+  <!-- Green Structural Wall Banding Lines -->
+  <line x1="280" y1="280" x2="950" y2="310" stroke="#0d9488" stroke-width="12"/>
+  <line x1="260" y1="420" x2="920" y2="450" stroke="#0d9488" stroke-width="12"/>
+
+  <!-- Precast Columns and Vertical Joints -->
+  <line x1="400" y1="125" x2="350" y2="630" stroke="#64748b" stroke-width="3"/>
+  <line x1="550" y1="132" x2="500" y2="650" stroke="#64748b" stroke-width="3"/>
+  <line x1="700" y1="138" x2="650" y2="665" stroke="#64748b" stroke-width="3"/>
+
+  <!-- Entrance Opening (Dark Gap) -->
+  <polygon points="340,500 480,515 470,610 330,590" fill="#0f172a"/>
+
+  <!-- Street in Foreground -->
+  <polygon points="0,620 1200,680 1200,800 0,800" fill="#334155"/>
+  <rect x="80" y="670" width="80" height="40" rx="8" fill="#ffffff"/>
+  <rect x="200" y="690" width="90" height="45" rx="8" fill="#1e40af"/>
+
+  <!-- Watermark Badge -->
+  <rect x="20" y="20" width="380" height="45" rx="10" fill="#0f172a" opacity="0.85"/>
+  <text x="35" y="48" fill="#ffffff" font-family="sans-serif" font-weight="bold" font-size="18">OBRA REAL: Perspectiva Aérea de Galpão</text>
+</svg>

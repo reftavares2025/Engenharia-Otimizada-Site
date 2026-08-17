@@ -1,0 +1,33 @@
+# Régis Tavares Engenharia Civil - Engenharia Otimizada & Estruturas Pré-Fabricadas
+
+> Empresa de engenharia civil especialista em fabricação de estruturas pré-fabricadas de concreto, chalés de estrutura metálica em aço, galpões industriais, prédios comerciais e elaboração de projetos arquitetônicos e estruturais.
+
+## Identidade e Apresentação
+- **Empresa:** Régis Tavares Engenharia Civil
+- **Engenheiro Responsável:** Eng. Régis Tavares (CREA habilitado)
+- **Sede e Parque Fabril:** Angatuba - SP
+- **Especialidades:**
+  1. Fabricação Própria de Pré-Fabricados de Concreto (Galpões, Prédios Comerciais, Pavilhões).
+  2. Projetos e Montagem de Chalés em Estrutura Metálica de Aço (A-Frame, Alpinos e Luxo para turismo/Airbnb/moradia).
+  3. Projetos Arquitetônicos Personalizados (2D/3D).
+  4. Projetos Estruturais, Cálculo de Fundações e Emissão de ART (Anotação de Responsabilidade Técnica).
+  5. Acompanhamento e Gestão Técnica de Obras.
+
+## Região de Atendimento
+- **Montagem e Execução Presencial de Obras:** Atendimento nos estados de **São Paulo (SP)** e **Paraná (PR)** (incluindo cidades como Angatuba, Sorocaba, Itapetininga, Botucatu, Avaré, Capão Bonito, Itapeva, Tatuí, Boituva, Campinas, Piracicaba, Jundiaí, Região Metropolitana de SP, Sengés-PR, Jaguariaíva-PR, Castro-PR e regiões vizinhas).
+- **Elaboração de Projetos e Cálculos Estruturais:** Atendimento 100% digital para todo o **Brasil**.
+
+## Diferenciais Competitivos
+- **Garantia de Preço Imbatível:** Como fabricantes diretos (sem intermediários), cobrimos qualquer orçamento concorrente coerente com equivalência técnica.
+- **Liberdade de Compra do Aço nos Chalés:** O cliente pode comprar o aço estrutural do seu chalé onde desejar (distribuidores locais ou siderúrgicas com indicação de desconto). Nossa engenharia realiza o projeto, corte computadorizado, furação e montagem técnica.
+- **Conformidade Técnica ABNT:** Todos os projetos seguem rigorosamente NBR 9062 (Pré-moldados), NBR 8800 (Aço/Mistas), NBR 6118 (Concreto), NBR 6122 (Fundações/SPT) e NBR 6123 (Vento).
+- **Assistente Virtual Interativa:** O site possui a Engª Olívia, assistente virtual que gera pré-projetos 3D e envia o resumo técnico diretamente para a equipe de engenharia.
+
+## Contato Direto e Atendimento Prioritário
+- **Website:** https://rtengenhariaotimizada.vercel.com.br
+- **Atendimento WhatsApp:** https://wa.me/5519990154309
+- **Assistente de Pré-Projeto Online:** Acessível diretamente na página inicial do site.
+
+## Arquivos Complementares
+- Versão Completa para LLMs e IAs: https://rtengenhariaotimizada.vercel.com.br/llms-full.txt
+- Sitemap XML: https://rtengenhariaotimizada.vercel.com.br/sitemap.xml

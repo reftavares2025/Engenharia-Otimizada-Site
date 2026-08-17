@@ -1,0 +1,50 @@
+# Robots.txt for Régis Tavares Engenharia Civil
+# Permite indexação total por motores de busca tradicionais e agentes de Inteligência Artificial (LLMs)
+
+User-agent: *
+Allow: /
+
+# Google AI & Search
+User-agent: Googlebot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl & Other AI Indexers
+User-agent: CCBot
+Allow: /
+User-agent: Cohere-ai
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: Diffbot
+Allow: /
+User-agent: FacebookBot
+Allow: /
+
+# Sitemaps e Arquivos de Contexto para IAs (LLMs.txt Standard)
+Sitemap: https://rtengenhariaotimizada.vercel.com.br/sitemap.xml
+# LLM Context: https://rtengenhariaotimizada.vercel.com.br/llms.txt
+# Full LLM Context: https://rtengenhariaotimizada.vercel.com.br/llms-full.txt

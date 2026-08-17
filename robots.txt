@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://rtengenharia.vercel.app/sitemap.xml
