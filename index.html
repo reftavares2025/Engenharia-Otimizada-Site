@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RT Engenharia Otimizada | Especialistas em Pré-Fabricados</title>
-    <meta name="description" content="Engenharia otimizada em pré-fabricados. Projetos personalizados com os melhores valores do mercado. Atendimento em 200km de Angatuba-SP.">
+    <meta name="description" content="Engenharia otimizada em pré-fabricados de concreto. Projetos sob medida, galpões comerciais e agronegócio com o melhor custo-benefício. Atendimento a 200km de Angatuba-SP.">
+    
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
     
     <!-- Analytics & Schema -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KF0SBM8TV2"></script>
@@ -19,71 +22,187 @@
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "name": "RT Engenharia Otimizada",
-      "image": "assets/logo.webp",
+      "image": "https://rtengenharia.vercel.app/assets/logo.webp",
       "telephone": "+5519990154309",
+      "priceRange": "$$",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Angatuba",
         "addressRegion": "SP",
         "addressCountry": "BR"
-      }
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "-23.4912",
+        "longitude": "-48.4116"
+      },
+      "url": "https://rtengenharia.vercel.app"
     }
     </script>
-
-    <style>
-        :root { --primary: #0056b3; --dark: #212529; --light: #f8f9fa; --accent: #ffc107; }
-        body { font-family: 'Inter', sans-serif; margin: 0; color: var(--dark); line-height: 1.6; }
-        .container { max-width: 1100px; margin: auto; padding: 20px; }
-        
-        header { background: var(--dark); color: white; padding: 1rem 0; text-align: center; }
-        header img { max-width: 150px; }
-        
-        .hero { text-align: center; padding: 4rem 20px; background: var(--light); }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-        
-        .cta-btn { display: inline-block; background: var(--primary); color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px; }
-        .cta-btn:hover { background: #004494; }
-
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 2rem 0; }
-        .gallery img { width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
-        .faq details { background: var(--light); padding: 15px; margin-bottom: 10px; border-radius: 5px; cursor: pointer; }
-    </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <img src="assets/logo.webp" alt="RT Engenharia Otimizada">
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="assets/logo.webp" alt="RT Engenharia Otimizada">
+            </div>
+            <a href="https://wa.me/5519990154309" class="nav-cta" target="_blank" rel="noopener">Falar com Engenheiro</a>
         </div>
     </header>
 
     <section class="hero">
-        <div class="container">
-            <h1>Soluções em Pré-Fabricados com Engenharia Otimizada</h1>
-            <p>Fabricantes especialistas, time de engenheiros, melhores valores e agilidade para sua obra.</p>
-            <a href="https://wa.me/5519990154309" class="cta-btn">Solicitar Orçamento via WhatsApp</a>
+        <div class="hero-content container">
+            <h1>Estruturas Pré-Fabricadas com Engenharia Otimizada</h1>
+            <p>Projetamos e fabricamos galpões logísticos, comerciais e estruturas para o agronegócio de alta durabilidade e com o melhor custo-benefício do mercado.</p>
+            <a href="https://wa.me/5519990154309" class="cta-btn" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.262 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.488 2.01 14.041 1.01 11.998 1.01c-5.44 0-9.866 4.372-9.87 9.802 0 1.96.512 3.878 1.483 5.581l-.976 3.565 3.734-.968L6.647 19.15z"/>
+                </svg>
+                Solicitar Orçamento no WhatsApp
+            </a>
         </div>
     </section>
 
-    <div class="container">
-        <section>
-            <h2>Nosso Portfólio</h2>
-            <div class="gallery">
-                <img src="assets/projeto1.webp" alt="Projeto 1">
-                <img src="assets/projeto2.webp" alt="Projeto 2">
-                <img src="assets/projeto3.webp" alt="Projeto 3">
-                <img src="assets/projeto4.webp" alt="Projeto 4">
-                <img src="assets/projeto5.webp" alt="Projeto 5">
-                <img src="assets/projeto6.webp" alt="Projeto 6">
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Por que a RT Engenharia?</h2>
+                <p>Unimos engenharia de precisão e fabricação própria para entregar estruturas seguras, rápidas e econômicas.</p>
             </div>
-        </section>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <h3>Economia Otimizada</h3>
+                    <p>Nossos projetos calculam a quantidade exata de concreto e aço necessária para a sua obra, eliminando desperdícios e gerando economia real de até 20% no custo estrutural.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" height="18" width="18" y="3" rx="2"/><path d="M21 9H3M21 15H3M12 3v18"/></svg>
+                    </div>
+                    <h3>Fabricação Própria</h3>
+                    <p>Controlamos 100% da cadeia de produção dos pré-fabricados de concreto. Com isso, cobrimos qualquer orçamento coerente da concorrência mantendo o alto padrão de segurança.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <h3>Logística & Agilidade</h3>
+                    <p>Atendimento especializado e entrega garantida em toda a região. Cobrimos um raio de 200km a partir da nossa sede em Angatuba-SP, com transporte próprio e seguro.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section class="faq">
-            <h2>Perguntas Frequentes</h2>
-            <details><summary>Qual a área de atendimento?</summary><p>Atendemos um raio de 200km de Angatuba-SP.</p></details>
-            <details><summary>Vocês fazem o projeto estrutural?</summary><p>Sim, nossa equipe de engenheiros projeta e otimiza sua estrutura.</p></details>
-            <details><summary>Como garantem o melhor valor?</summary><p>Como fabricantes, cobrimos orçamentos coerentes.</p></details>
-        </section>
-    </div>
+    <section class="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nosso Portfólio</h2>
+                <p>Veja algumas das obras projetadas, fabricadas e entregues pelo nosso time de especialistas.</p>
+            </div>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="assets/projeto1.webp" alt="Galpão Industrial em Pré-Fabricado">
+                    <div class="gallery-overlay">
+                        <h3>Galpão Comercial Grande Porte</h3>
+                        <p>Estrutura otimizada para vão livre máximo.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/projeto2.webp" alt="Montagem de Pilares Pré-Moldados">
+                    <div class="gallery-overlay">
+                        <h3>Montagem de Pilares</h3>
+                        <p>Precisão milimétrica na montagem de estruturas pesadas.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/projeto3.webp" alt="Estrutura de Concreto para Agronegócio">
+                    <div class="gallery-overlay">
+                        <h3>Galpão para Agronegócio</h3>
+                        <p>Desenvolvido para armazenagem e maquinários.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/projeto4.webp" alt="Cobertura de Galpão Logístico">
+                    <div class="gallery-overlay">
+                        <h3>Estrutura Logística</h3>
+                        <p>Economia no consumo de aço com vigas de concreto protendido.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/projeto5.webp" alt="Obras de Engenharia Civil e Lajes">
+                    <div class="gallery-overlay">
+                        <h3>Área Comercial Multiuso</h3>
+                        <p>Pé direito duplo otimizado para múltiplos andares.</p>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/projeto6.webp" alt="Fundação e Vigas de Concreto">
+                    <div class="gallery-overlay">
+                        <h3>Infraestrutura Robusta</h3>
+                        <p>Fundações profundas integradas perfeitamente aos pilares.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Perguntas Frequentes</h2>
+                <p>Tire suas principais dúvidas sobre o fornecimento de estruturas pré-fabricadas.</p>
+            </div>
+            <div class="faq-container">
+                <details>
+                    <summary>Qual é o raio de atendimento da RT Engenharia?</summary>
+                    <p>Atendemos um raio de até 200km a partir da nossa fábrica em Angatuba-SP, englobando as regiões de Itapetininga, Sorocaba, Botucatu, Avaré, entre outras.</p>
+                </details>
+                <details>
+                    <summary>O projeto estrutural está incluso no orçamento?</summary>
+                    <p>Sim! Nossa equipe de engenharia civil faz toda a modelagem, cálculo estrutural e detalhamento das peças pré-fabricadas de acordo com as necessidades específicas da sua obra.</p>
+                </details>
+                <details>
+                    <summary>Como a RT garante o melhor valor de pré-fabricados?</summary>
+                    <p>Por sermos os fabricantes oficiais de todos os blocos, pilares, lajes e vigas, eliminamos a figura do intermediário. Isso nos dá margem de negociação para cobrir orçamentos concorrentes coerentes.</p>
+                </details>
+                <details>
+                    <summary>Quanto tempo leva a montagem de um galpão?</summary>
+                    <p>Estruturas pré-fabricadas chegam prontas ao canteiro de obras, reduzindo o tempo de execução em até 50% em comparação à alvenaria ou moldagem no local. Um galpão médio costuma ser montado em poucas semanas.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <h4>RT Engenharia Otimizada</h4>
+                <p>Especialistas em estruturas e peças pré-fabricadas de concreto de alta durabilidade para comércio, indústria e agronegócio.</p>
+                <p>Angatuba - SP | CEP 18240-000</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contato & Horários</h4>
+                <p><strong>WhatsApp:</strong> (19) 99015-4309</p>
+                <p><strong>Atendimento:</strong> Seg. a Sex. das 08h às 18h</p>
+                <p><strong>Região:</strong> Até 200km de Angatuba-SP</p>
+            </div>
+            <div class="footer-col">
+                <h4>Links Úteis</h4>
+                <ul>
+                    <li><a href="sitemap.xml">Mapa do Site (XML)</a></li>
+                    <li><a href="robots.txt">Robots.txt</a></li>
+                    <li><a href="llms.txt">Informações para IAs (llms.txt)</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 RT Engenharia Otimizada. Todos os direitos reservados.</p>
+            <div class="footer-bottom-links">
+                <a href="https://wa.me/5519990154309" target="_blank" rel="noopener">Fale Conosco</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
