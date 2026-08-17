@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://rtengenhariaotimizada.vercel.com.br/sitemap.xml
+Sitemap: https://rtengenharia.vercel.app/sitemap.xml
