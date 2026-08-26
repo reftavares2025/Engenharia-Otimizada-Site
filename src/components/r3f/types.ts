@@ -38,4 +38,8 @@ export interface Viewer3DControls {
   showRoof: boolean;
   showWalls: boolean;
   autoRotate: boolean;
+  // When true, the ground floor is raised one story on pilotis above a
+  // semi-buried subsolo level (1 floor below street/grade level). When
+  // false (default), the structure sits directly above street level.
+  hasSubsolo?: boolean;
 }

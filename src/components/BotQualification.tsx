@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, MessageSquare, ShieldCheck, MapPin, CheckCircle, RefreshCw, Layers, CheckCircle2, ChevronRight, AlertTriangle, Box } from 'lucide-react';
+import { Bot, Send, User, Sparkles, MessageSquare, ShieldCheck, MapPin, CheckCircle, RefreshCw, Layers, CheckCircle2, ChevronRight, AlertTriangle, Box, Phone, Mail, Lock } from 'lucide-react';
 import { Project3DViewer, Project3DParams } from './Project3DViewer';
 import { buildWhatsAppLink } from '../utils/whatsapp';
 
@@ -34,6 +34,25 @@ export const BotQualification: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [customText, setCustomText] = useState('');
+
+  // Contact gate: collected once, before the technical questions begin,
+  // so the Régis Tavares team always has a way to reach the lead back.
+  const [contact, setContact] = useState({ nome: '', telefone: '', email: '' });
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [contactTouched, setContactTouched] = useState(false);
+
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+  const isContactValid =
+    contact.nome.trim().length >= 3 &&
+    contact.telefone.replace(/\D/g, '').length >= 10 &&
+    isValidEmail(contact.email);
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactTouched(true);
+    if (!isContactValid) return;
+    setContactSubmitted(true);
+  };
 
   const steps: ChatStep[] = [
     {
@@ -223,7 +242,7 @@ export const BotQualification: React.FC = () => {
                 <h3 className="font-bold text-xs uppercase tracking-wider text-white flex items-center gap-2">
                   <span>Eng(a). Olívia • Assistente Régis Tavares</span>
                   <span className="bg-sky-500/20 text-sky-300 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border border-sky-400/30">
-                    Sistema Ativo
+                    Questionário Guiado
                   </span>
                 </h3>
                 <p className="text-[11px] text-slate-300 flex items-center gap-1 font-normal">
@@ -245,7 +264,79 @@ export const BotQualification: React.FC = () => {
           </div>
 
           {/* Interactive Flow */}
-          {!isCompleted ? (
+          {!contactSubmitted ? (
+            /* CONTACT GATE: collected before any technical question */
+            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-center space-y-6">
+              <div className="bg-slate-900/90 border border-white/15 p-6 rounded-2xl space-y-4 shadow-xl">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-300 flex-shrink-0 mt-0.5">
+                    <Bot className="w-4 h-4" />
+                  </div>
+                  <div className="space-y-2 flex-1">
+                    <span className="text-[10px] font-mono font-bold text-sky-400 uppercase tracking-widest block">
+                      Eng(a). Olívia pergunta:
+                    </span>
+                    <p className="text-sm sm:text-base text-slate-100 font-medium leading-relaxed">
+                      Antes de gerar o seu modelo 3D, preciso do seu nome, telefone e e-mail para que o Eng. Régis Tavares consiga te retornar com o pré-projeto e a estimativa técnica.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <form onSubmit={handleContactSubmit} className="space-y-3">
+                <div className="relative">
+                  <User className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={contact.nome}
+                    onChange={(e) => setContact((prev) => ({ ...prev, nome: e.target.value }))}
+                    placeholder="Seu nome completo"
+                    className="w-full bg-slate-950 border border-white/20 text-white placeholder-slate-400 text-sm rounded-2xl pl-11 pr-5 py-4 focus:outline-none focus:border-sky-400 transition-colors"
+                    autoFocus
+                  />
+                </div>
+                <div className="relative">
+                  <Phone className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    value={contact.telefone}
+                    onChange={(e) => setContact((prev) => ({ ...prev, telefone: e.target.value }))}
+                    placeholder="Seu WhatsApp com DDD, ex: (15) 99999-8888"
+                    className="w-full bg-slate-950 border border-white/20 text-white placeholder-slate-400 text-sm rounded-2xl pl-11 pr-5 py-4 focus:outline-none focus:border-sky-400 transition-colors"
+                  />
+                </div>
+                <div className="relative">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    value={contact.email}
+                    onChange={(e) => setContact((prev) => ({ ...prev, email: e.target.value }))}
+                    placeholder="Seu melhor e-mail"
+                    className="w-full bg-slate-950 border border-white/20 text-white placeholder-slate-400 text-sm rounded-2xl pl-11 pr-5 py-4 focus:outline-none focus:border-sky-400 transition-colors"
+                  />
+                </div>
+
+                {contactTouched && !isContactValid && (
+                  <p className="text-xs text-amber-400 font-medium px-1">
+                    Preencha nome, telefone com DDD e um e-mail válido para continuar.
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm px-6 py-4 rounded-2xl transition-colors flex items-center justify-center gap-2"
+                >
+                  <span>Iniciar Simulação 3D</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </form>
+
+              <div className="p-3.5 bg-slate-950/80 border border-white/10 rounded-2xl text-xs text-slate-300 flex items-center gap-2 font-mono">
+                <Lock className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <span>Seus dados são usados só para o Eng. Régis Tavares retornar sobre este pré-projeto — nada de spam.</span>
+              </div>
+            </div>
+          ) : !isCompleted ? (
             <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-6">
               
               {/* Progress Bar */}
@@ -346,7 +437,14 @@ export const BotQualification: React.FC = () => {
               </div>
 
               {/* 3D Interactive Component */}
-              <Project3DViewer params={params} />
+              <Project3DViewer
+                params={{
+                  ...params,
+                  clientName: contact.nome,
+                  clientPhone: contact.telefone,
+                  clientEmail: contact.email
+                }}
+              />
 
               {/* Summary Cards */}
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
@@ -378,7 +476,7 @@ export const BotQualification: React.FC = () => {
                 <a
                   href={buildWhatsAppLink(
                     `Envio de Pré-Projeto Técnico - ${params.projectType} (${params.areaM2}m²)`,
-                    `Resumo do Pré-Projeto criado com a Enga. Olívia:\n• Tipo de Obra: ${params.projectType}\n• Cidade/Local: ${params.city}\n• Metragem: ${params.areaM2}m²\n• Possui Terreno: ${params.hasLand}\n• Projeto Arquitetônico: ${params.hasArchitectural}\n• Quartos: ${params.bedrooms}\n• Mezanino: ${params.hasMezzanine ? 'Sim' : 'Não'}\n• Sondagem SPT: ${params.hasSondagemSPT}\n\nOlá Eng. Régis Tavares! Acabei de definir meu pré-projeto com a Olívia e gostaria que sua equipe de Engenheiros analise para darmos andamento ao orçamento!`
+                    `Resumo do Pré-Projeto criado com a Enga. Olívia:\n\n• Nome: ${contact.nome}\n• Telefone: ${contact.telefone}\n• E-mail: ${contact.email}\n\n• Tipo de Obra: ${params.projectType}\n• Cidade/Local: ${params.city}\n• Metragem: ${params.areaM2}m²\n• Possui Terreno: ${params.hasLand}\n• Projeto Arquitetônico: ${params.hasArchitectural}\n• Quartos: ${params.bedrooms}\n• Mezanino: ${params.hasMezzanine ? 'Sim' : 'Não'}\n• Sondagem SPT: ${params.hasSondagemSPT}\n\nOlá Eng. Régis Tavares! Acabei de definir meu pré-projeto com a Olívia e gostaria que sua equipe de Engenheiros analise para darmos andamento ao orçamento!`
                   )}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -27,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ activePage, onSelectPage, onOpen
     { id: 'chales', name: 'Chalés em Aço de Luxo', icon: Home, badge: 'Especialidade', category: 'Sistemas Construtivos' },
     { id: 'fluxo-de-projeto', name: 'Fluxo & Viabilidade da Obra', icon: Compass, badge: 'Passo a Passo', category: 'Engenharia' },
     { id: 'projetos', name: 'Portfólio de Obras & Renders', icon: LayoutGrid, badge: 'Projetos 3D', category: 'Engenharia' },
-    { id: 'assistente-ia', name: 'Assistente IA & Modelo 3D', icon: Bot, badge: 'Interativo', category: 'Ferramentas' },
+    { id: 'assistente-ia', name: 'Assistente Técnica & Modelo 3D', icon: Bot, badge: 'Interativo', category: 'Ferramentas' },
     { id: 'calculadora', name: 'Simulador de Custos & Prazos', icon: Calculator, badge: 'Cotação', category: 'Ferramentas' },
     { id: 'parceiros', name: 'Fornecedores & Qualidade', icon: ShieldCheck, badge: 'Gerdau/Votorantim', category: 'Institucional' },
     { id: 'faq', name: 'Perguntas Frequentes (FAQ)', icon: HelpCircle, badge: '16+ Dúvidas', category: 'Institucional' },

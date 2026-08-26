@@ -35,6 +35,10 @@ export interface Project3DParams {
   hasSubsolo?: boolean;
   hasMezzanine?: boolean;
   hasSondagemSPT?: string;
+  // Contact info, collected before the simulation starts:
+  clientName?: string;
+  clientPhone?: string;
+  clientEmail?: string;
 }
 
 interface Props {
@@ -87,10 +91,15 @@ export const Project3DViewer: React.FC<Props> = ({ params }) => {
     showSlabs,
     showRoof,
     showWalls,
-    autoRotate
+    autoRotate,
+    hasSubsolo: params.hasSubsolo ?? false
   };
 
-  const whatsappMessage = `Olá Eng. Régis Tavares! Acabei de personalizar um modelo 3D no Assistente Técnico com as seguintes características:\n• Tipo: ${params.projectType}\n• Cidade da Obra: ${params.city}\n• Área: ${area} m²\n• Terreno: ${params.hasLand}\n• Sondagem SPT: ${params.hasSondagemSPT || 'A definir'}\n\nGostaria de entender a viabilidade e agendar uma análise técnica.`;
+  const contactBlock = params.clientName
+    ? `• Nome: ${params.clientName}\n• Telefone: ${params.clientPhone || 'Não informado'}\n• E-mail: ${params.clientEmail || 'Não informado'}\n\n`
+    : '';
+
+  const whatsappMessage = `Olá Eng. Régis Tavares! Acabei de personalizar um modelo 3D no Assistente Técnico com as seguintes características:\n\n${contactBlock}• Tipo: ${params.projectType}\n• Cidade da Obra: ${params.city}\n• Área: ${area} m²\n• Terreno: ${params.hasLand}\n• Sondagem SPT: ${params.hasSondagemSPT || 'A definir'}\n\nGostaria de entender a viabilidade e agendar uma análise técnica.`;
   const whatsappUrl = buildWhatsAppLink(
     `Simulação 3D: ${params.projectType} (${area}m²)`,
     whatsappMessage

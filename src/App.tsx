@@ -14,6 +14,7 @@ import { PartnersSection } from './components/PartnersSection';
 import { FAQSection } from './components/FAQSection';
 import { ContactCTA } from './components/ContactCTA';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { AIChatWidget } from './components/AIChatWidget';
 import { SocialProofToast } from './components/SocialProofToast';
 import { Footer } from './components/Footer';
 import { ConsultationModal } from './components/ConsultationModal';
@@ -218,7 +219,7 @@ export default function App() {
             <PageHeaderBanner
               title="Assistente Técnica Engª. Olívia & Simulador 3D"
               subtitle="Responda às perguntas para gerar em tempo real o modelo tridimensional interativo da sua obra com estimativa de aço NBR 8800."
-              categoryTag="Modelagem 3D & Inteligência Técnica"
+              categoryTag="Modelagem 3D & Simulação Técnica"
               onSelectPage={handleSelectPage}
             />
 
@@ -321,6 +322,9 @@ export default function App() {
 
       {/* Floating WhatsApp Action Button */}
       <FloatingWhatsApp />
+
+      {/* Floating AI Chat — the one assistant on the site backed by real Gemini AI */}
+      <AIChatWidget />
 
       {/* Discrete Social Proof Notification Toast */}
       <SocialProofToast />

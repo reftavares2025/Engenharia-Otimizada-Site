@@ -2,7 +2,7 @@
  * Utility function to generate deep WhatsApp links with pre-filled contextual messages.
  */
 export function buildWhatsAppLink(topic: string, details?: string, extraParams?: Record<string, string | number | boolean>): string {
-  const phone = "5519990154309";
+  const phone = "5515998606403";
   let message = `Olá Eng. Régis! Vi no site da Régis Tavares Engenharia e gostaria de solicitar atendimento sobre:\n👉 *${topic.trim()}*`;
   
   if (details && details.trim()) {

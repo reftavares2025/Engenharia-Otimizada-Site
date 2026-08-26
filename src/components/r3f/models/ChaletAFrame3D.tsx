@@ -15,7 +15,8 @@ export const ChaletAFrame3D: React.FC<Props> = ({ controls }) => {
     showColumns,
     showSlabs,
     showRoof,
-    showWalls
+    showWalls,
+    hasSubsolo
   } = controls;
 
   // Material helpers
@@ -35,6 +36,13 @@ export const ChaletAFrame3D: React.FC<Props> = ({ controls }) => {
   const h = 6.8;
   const numFrames = 5;
   const stepZ = l / (numFrames - 1);
+
+  // Pé-direito do pavimento semienterrado (subsolo). Quando o terreno exige
+  // Pilotis/Subsolo, o térreo sobe uma laje inteira acima do nível da rua e
+  // o subsolo ocupa o vão 1 andar abaixo. Sem subsolo, o chalé fica direto
+  // sobre o nível da rua (comportamento padrão, inalterado).
+  const SUBSOLO_HEIGHT = 2.8;
+  const raise = hasSubsolo ? SUBSOLO_HEIGHT : 0;
 
   // Exploded offsets
   const expY = explodedOffset * 3.5;
@@ -71,6 +79,50 @@ export const ChaletAFrame3D: React.FC<Props> = ({ controls }) => {
 
   return (
     <group position={[0, 0, 0]}>
+      {/* 0. SUBSOLO / PILOTIS — semi-buried level, 1 floor below street level,
+          only rendered when the terrain requires it (hasSubsolo). Supports
+          the raised ground floor above on visible steel pilotis. */}
+      {hasSubsolo && (
+        <group>
+          {/* Perimeter retaining walls */}
+          <mesh position={[0, -SUBSOLO_HEIGHT / 2, -l / 2 + 0.1]}>
+            <boxGeometry args={[w, SUBSOLO_HEIGHT, 0.2]} />
+            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[-w / 2 + 0.1, -SUBSOLO_HEIGHT / 2, 0]}>
+            <boxGeometry args={[0.2, SUBSOLO_HEIGHT, l]} />
+            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[w / 2 - 0.1, -SUBSOLO_HEIGHT / 2, 0]}>
+            <boxGeometry args={[0.2, SUBSOLO_HEIGHT, l]} />
+            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
+          </mesh>
+          {/* Ventilation strip window on the front face */}
+          <mesh position={[0, -0.35, l / 2 - 0.05]}>
+            <boxGeometry args={[w - 1.4, 0.5, 0.05]} />
+            <meshStandardMaterial color={glassColor} transparent opacity={0.35} metalness={0.8} roughness={0.1} />
+          </mesh>
+          {/* Corner pilotis columns holding the raised structure above */}
+          {[
+            [-w / 2 + 0.4, -l / 2 + 0.4],
+            [w / 2 - 0.4, -l / 2 + 0.4],
+            [-w / 2 + 0.4, l / 2 - 0.4],
+            [w / 2 - 0.4, l / 2 - 0.4],
+          ].map(([x, z], i) => (
+            <mesh key={`pilotis-${i}`} position={[x, -SUBSOLO_HEIGHT / 2, z]} castShadow>
+              <boxGeometry args={[0.3, SUBSOLO_HEIGHT, 0.3]} />
+              <meshStandardMaterial color={steelDark} metalness={0.7} roughness={0.3} wireframe={wireframe} />
+            </mesh>
+          ))}
+          {/* Slab that caps the subsolo and forms the underside of the raised térreo */}
+          <mesh position={[0, 0, 0]} receiveShadow>
+            <boxGeometry args={[w + 0.4, 0.18, l + 0.4]} />
+            <meshStandardMaterial color={concreteColor} roughness={0.7} wireframe={wireframe} />
+          </mesh>
+        </group>
+      )}
+
+      <group position={[0, raise, 0]}>
       {/* 1. FOUNDATION / SAPATAS (Under Ground Level Y <= 0) */}
       {showFoundation && (
         <group position={[0, 0, 0]}>
@@ -366,6 +418,7 @@ export const ChaletAFrame3D: React.FC<Props> = ({ controls }) => {
           </group>
         </group>
       )}
+      </group>
     </group>
   );
 };
