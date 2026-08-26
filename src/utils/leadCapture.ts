@@ -118,8 +118,29 @@ export async function captureLeadSilently(data: LeadData): Promise<void> {
   const scoreResult = calculateLeadScore(data);
   const now = new Date().toISOString();
 
+  // Extract UTM tracking parameters from URL
+  let utmSource = '';
+  let utmCampaign = '';
+  let utmMedium = '';
+
+  if (typeof window !== 'undefined') {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      utmSource = urlParams.get('utm_source') || '';
+      utmCampaign = urlParams.get('utm_campaign') || '';
+      utmMedium = urlParams.get('utm_medium') || '';
+    } catch {
+      // ignore
+    }
+  }
+
+  const canalInfo = utmSource
+    ? `Instagram Ads (${utmCampaign || utmMedium || utmSource})`
+    : data.canal || 'Site Direto / Orgânico';
+
   const payload = {
     ...data,
+    canal: canalInfo,
     dataHora: now,
     pontuacao: `${scoreResult.score}/${scoreResult.maxScore}`,
     classificacao: scoreResult.level,
