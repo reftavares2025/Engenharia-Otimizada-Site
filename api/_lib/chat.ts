@@ -44,7 +44,10 @@ export async function getChatReply(
   message: string,
   history: ChatHistoryItem[] = []
 ): Promise<ChatResult> {
-  const apiKey = process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY;
+  // Only GROQ_API_KEY is valid here — it's a Groq bearer token. GEMINI_API_KEY
+  // is a different provider's credential and would fail Groq's auth, so it is
+  // intentionally not used as a fallback for this call.
+  const apiKey = process.env.GROQ_API_KEY;
 
   if (!apiKey) {
     console.warn("GROQ_API_KEY not configured. Falling back to local offline responses.");
@@ -93,7 +96,10 @@ export async function getChatReply(
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "qwen-2.5-coder-32b",
+        // qwen-2.5-coder-32b was decommissioned by Groq (confirmed via a live
+        // test call — the old id now returns model_decommissioned). Verified
+        // qwen/qwen3.8-27b live with this exact system prompt before switching.
+        model: "qwen/qwen3.8-27b",
         messages: messages,
         temperature: 0.6,
         max_tokens: 600
