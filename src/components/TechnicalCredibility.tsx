@@ -50,13 +50,13 @@ export const TechnicalCredibility: React.FC<TechnicalCredibilityProps> = ({ onOp
             </div>
             <div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-amber-400 font-extrabold">
-                Conselho de Classe
+                Garantia de Qualidade
               </div>
               <h4 className="text-sm font-bold text-white leading-snug flex items-center gap-1">
-                <span>Certificado CREA</span>
+                <span>Engenharia Certificada</span>
                 <CheckCircle className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400/20" />
               </h4>
-              <p className="text-[11px] text-slate-400">Registro Profissional Ativo & Regularizado</p>
+              <p className="text-[11px] text-slate-400">Equipe registrada no conselho de engenharia</p>
             </div>
           </div>
 
@@ -67,12 +67,12 @@ export const TechnicalCredibility: React.FC<TechnicalCredibilityProps> = ({ onOp
             </div>
             <div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-emerald-400 font-extrabold">
-                Segurança Jurídica
+                Segurança Total
               </div>
               <h4 className="text-sm font-bold text-white leading-snug">
-                ART Emitida por Obra
+                Obra Regularizada
               </h4>
-              <p className="text-[11px] text-slate-400">Anotação de Responsabilidade Técnica</p>
+              <p className="text-[11px] text-slate-400">Emissão de Responsabilidade Técnica (ART)</p>
             </div>
           </div>
 
@@ -83,12 +83,12 @@ export const TechnicalCredibility: React.FC<TechnicalCredibilityProps> = ({ onOp
             </div>
             <div>
               <div className="text-[10px] font-mono uppercase tracking-widest text-blue-400 font-extrabold">
-                Normas ABNT
+                Padrão de Excelência
               </div>
               <h4 className="text-sm font-bold text-white leading-snug">
-                NBR 8800, 9062 & 6118
+                Materiais Normatizados
               </h4>
-              <p className="text-[11px] text-slate-400">Aço, Pré-Moldados e Concreto Armado</p>
+              <p className="text-[11px] text-slate-400">Aço, pré-moldados e concreto com laudo</p>
             </div>
           </div>
 

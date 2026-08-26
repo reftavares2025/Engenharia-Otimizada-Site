@@ -7,7 +7,7 @@ import { getChatReply, type ChatHistoryItem } from "./api/_lib/chat";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = 2015;
 
 app.use(express.json());
 

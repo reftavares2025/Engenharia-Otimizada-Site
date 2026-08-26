@@ -190,7 +190,7 @@ export const Project3DViewer: React.FC<Props> = ({ params }) => {
           />
 
           <Grid
-            position={[0, -0.42, 0]}
+            position={[0, 0, 0]}
             args={[40, 40]}
             cellSize={1.0}
             cellColor="#334155"
@@ -199,7 +199,7 @@ export const Project3DViewer: React.FC<Props> = ({ params }) => {
             fadeDistance={35}
           />
 
-          <Center position={[0, 0, 0]}>
+          <Center disableY position={[0, 0, 0]}>
             {activeModelKey === 'chale-aframe' && <ChaletAFrame3D controls={controls} />}
             {activeModelKey === 'chale-alpino' && <ChaletAlpino3D controls={controls} />}
             {activeModelKey === 'galpao-industrial' && (

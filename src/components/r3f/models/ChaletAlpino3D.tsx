@@ -34,12 +34,9 @@ export const ChaletAlpino3D: React.FC<Props> = ({ controls }) => {
   const h1 = 3.2; // First floor height
   const hTotal = 7.6; // Peak height
 
-  // Pé-direito do pavimento semienterrado (subsolo). Quando o terreno exige
-  // Pilotis/Subsolo, o térreo sobe uma laje inteira acima do nível da rua e
-  // o subsolo ocupa o vão 1 andar abaixo. Sem subsolo, o chalé fica direto
-  // sobre o nível da rua (comportamento padrão, inalterado).
-  const SUBSOLO_HEIGHT = 2.8;
-  const raise = hasSubsolo ? SUBSOLO_HEIGHT : 0;
+  // Altura dos pilotis estruturais elevados (acima do solo).
+  const PILOTIS_HEIGHT = 2.4;
+  const raise = hasSubsolo ? PILOTIS_HEIGHT : 0;
 
   const expY = explodedOffset * 4.0;
   const expZ = explodedOffset * 2.5;
@@ -74,68 +71,124 @@ export const ChaletAlpino3D: React.FC<Props> = ({ controls }) => {
 
   return (
     <group position={[0, 0, 0]}>
-      {/* 0. SUBSOLO / PILOTIS — semi-buried level, 1 floor below street level,
-          only rendered when the terrain requires it (hasSubsolo). Supports
-          the raised ground floor above on visible steel pilotis. */}
+      {/* 0. ESTRUTURA DE PILOTIS ELEVADOS ACIMA DO SOLO (Quando hasSubsolo = true) */}
       {hasSubsolo && (
-        <group>
-          {/* Perimeter retaining walls */}
-          <mesh position={[0, -SUBSOLO_HEIGHT / 2, -l / 2 + 0.1]}>
-            <boxGeometry args={[w, SUBSOLO_HEIGHT, 0.2]} />
-            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
-          </mesh>
-          <mesh position={[-w / 2 + 0.1, -SUBSOLO_HEIGHT / 2, 0]}>
-            <boxGeometry args={[0.2, SUBSOLO_HEIGHT, l]} />
-            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
-          </mesh>
-          <mesh position={[w / 2 - 0.1, -SUBSOLO_HEIGHT / 2, 0]}>
-            <boxGeometry args={[0.2, SUBSOLO_HEIGHT, l]} />
-            <meshStandardMaterial color={concreteColor} roughness={0.85} wireframe={wireframe} />
-          </mesh>
-          {/* Ventilation strip window on the front face */}
-          <mesh position={[0, -0.4, l / 2 - 0.05]}>
-            <boxGeometry args={[w - 1.8, 0.55, 0.05]} />
-            <meshStandardMaterial color={glassColor} transparent opacity={0.35} metalness={0.8} roughness={0.1} />
-          </mesh>
-          {/* Corner pilotis columns holding the raised structure above */}
-          {[
-            [-w / 2 + 0.5, -l / 2 + 0.5],
-            [w / 2 - 0.5, -l / 2 + 0.5],
-            [-w / 2 + 0.5, l / 2 - 0.5],
-            [w / 2 - 0.5, l / 2 - 0.5],
-          ].map(([x, z], i) => (
-            <mesh key={`pilotis-${i}`} position={[x, -SUBSOLO_HEIGHT / 2, z]} castShadow>
-              <boxGeometry args={[0.32, SUBSOLO_HEIGHT, 0.32]} />
-              <meshStandardMaterial color={steelDark} metalness={0.7} roughness={0.3} wireframe={wireframe} />
-            </mesh>
-          ))}
-          {/* Slab that caps the subsolo and forms the underside of the raised térreo */}
-          <mesh position={[0, 0, 0]} receiveShadow>
-            <boxGeometry args={[w + 0.4, 0.18, l + 0.4]} />
-            <meshStandardMaterial color={concreteColor} roughness={0.7} wireframe={wireframe} />
-          </mesh>
-        </group>
-      )}
-
-      <group position={[0, raise, 0]}>
-      {/* 1. FOUNDATION & PILOTIS / DECK BASE (Under Ground Level Y <= 0) */}
-      {showFoundation && (
         <group position={[0, 0, 0]}>
-          {/* Concrete Footing Grid under soil */}
+          {/* Sapatas e Blocos de Fundação no Solo (Y = 0) + Pilares Pilotis de Aço */}
           {[-w / 2 + 0.5, 0, w / 2 - 0.5].map((x, xi) =>
             [-l / 2 + 0.5, 0, l / 2 - 0.5, l / 2 + 2.0].map((z, zi) => (
-              <group key={`fnd-${xi}-${zi}`} position={[x, 0, z]}>
-                <mesh position={[0, -0.3, 0]} castShadow>
-                  <boxGeometry args={[0.8, 0.5, 0.8]} />
+              <group key={`pilotis-alpino-${xi}-${zi}`}>
+                {/* Sapata de Concreto no Chão */}
+                <mesh position={[x, -0.25, z]} castShadow>
+                  <boxGeometry args={[0.85, 0.5, 0.85]} />
                   <meshStandardMaterial color={concreteColor} roughness={0.9} wireframe={wireframe} />
                 </mesh>
-                <mesh position={[0, 0.02, 0]}>
-                  <boxGeometry args={[0.35, 0.04, 0.35]} />
-                  <meshStandardMaterial color={steelGold} wireframe={wireframe} />
+                {/* Placa base metálica */}
+                <mesh position={[x, 0.02, z]}>
+                  <boxGeometry args={[0.38, 0.04, 0.38]} />
+                  <meshStandardMaterial color={steelGold} metalness={0.8} />
+                </mesh>
+                {/* Pilar vertical de aço subindo do solo até a laje elevada */}
+                <mesh position={[x, PILOTIS_HEIGHT / 2, z]} castShadow>
+                  <boxGeometry args={[0.26, PILOTIS_HEIGHT, 0.26]} />
+                  <meshStandardMaterial color={steelDark} metalness={0.7} roughness={0.3} wireframe={wireframe} />
                 </mesh>
               </group>
             ))
           )}
+
+          {/* Vigas Principais de Travamento do Deck Elevado no Topo dos Pilotis */}
+          <mesh position={[-w / 2 + 0.5, PILOTIS_HEIGHT - 0.1, l * 0.1]} castShadow>
+            <boxGeometry args={[0.25, 0.25, l + 2.8]} />
+            <meshStandardMaterial color={steelDark} metalness={0.7} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[w / 2 - 0.5, PILOTIS_HEIGHT - 0.1, l * 0.1]} castShadow>
+            <boxGeometry args={[0.25, 0.25, l + 2.8]} />
+            <meshStandardMaterial color={steelDark} metalness={0.7} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[0, PILOTIS_HEIGHT - 0.1, -l / 2 + 0.5]} castShadow>
+            <boxGeometry args={[w, 0.25, 0.25]} />
+            <meshStandardMaterial color={steelDark} metalness={0.7} wireframe={wireframe} />
+          </mesh>
+          <mesh position={[0, PILOTIS_HEIGHT - 0.1, l / 2 + 2.0]} castShadow>
+            <boxGeometry args={[w, 0.25, 0.25]} />
+            <meshStandardMaterial color={steelDark} metalness={0.7} wireframe={wireframe} />
+          </mesh>
+
+          {/* Contraventamento Metálico em X nas Laterais */}
+          {[-l / 2 + 0.5, 0, l / 2 - 0.5].map((zStart, i) => {
+            const zNext = [-l / 2 + 0.5, 0, l / 2 - 0.5, l / 2 + 2.0][i + 1];
+            const spanZ = zNext - zStart;
+            const zMid = zStart + spanZ / 2;
+            const diagLen = Math.sqrt(spanZ ** 2 + PILOTIS_HEIGHT ** 2);
+            const diagAngle = Math.atan2(spanZ, PILOTIS_HEIGHT);
+
+            return (
+              <group key={`bracing-alpino-${i}`}>
+                <mesh position={[-w / 2 + 0.5, PILOTIS_HEIGHT / 2, zMid]} rotation={[diagAngle, 0, 0]}>
+                  <cylinderGeometry args={[0.035, 0.035, diagLen, 8]} />
+                  <meshStandardMaterial color={steelGold} metalness={0.8} />
+                </mesh>
+                <mesh position={[-w / 2 + 0.5, PILOTIS_HEIGHT / 2, zMid]} rotation={[-diagAngle, 0, 0]}>
+                  <cylinderGeometry args={[0.035, 0.035, diagLen, 8]} />
+                  <meshStandardMaterial color={steelGold} metalness={0.8} />
+                </mesh>
+                <mesh position={[w / 2 - 0.5, PILOTIS_HEIGHT / 2, zMid]} rotation={[diagAngle, 0, 0]}>
+                  <cylinderGeometry args={[0.035, 0.035, diagLen, 8]} />
+                  <meshStandardMaterial color={steelGold} metalness={0.8} />
+                </mesh>
+                <mesh position={[w / 2 - 0.5, PILOTIS_HEIGHT / 2, zMid]} rotation={[-diagAngle, 0, 0]}>
+                  <cylinderGeometry args={[0.035, 0.035, diagLen, 8]} />
+                  <meshStandardMaterial color={steelGold} metalness={0.8} />
+                </mesh>
+              </group>
+            );
+          })}
+
+          {/* Escada Metálica de Acesso Frontal ao Deck Elevado */}
+          <group position={[w * 0.35, 0, l / 2 + 2.8]}>
+            {Array.from({ length: 8 }).map((_, stepIdx) => {
+              const stepY = (stepIdx / 8) * PILOTIS_HEIGHT;
+              const stepZ = (stepIdx / 8) * 1.6;
+              return (
+                <mesh key={`stair-alpino-${stepIdx}`} position={[0, stepY, 1.6 - stepZ]}>
+                  <boxGeometry args={[1.1, 0.06, 0.28]} />
+                  <meshStandardMaterial color={steelDark} metalness={0.8} />
+                </mesh>
+              );
+            })}
+            <mesh position={[-0.57, PILOTIS_HEIGHT / 2, 0.8]} rotation={[-Math.atan2(1.6, PILOTIS_HEIGHT), 0, 0]}>
+              <boxGeometry args={[0.05, Math.sqrt(PILOTIS_HEIGHT ** 2 + 1.6 ** 2), 0.15]} />
+              <meshStandardMaterial color={steelGold} metalness={0.8} />
+            </mesh>
+            <mesh position={[0.57, PILOTIS_HEIGHT / 2, 0.8]} rotation={[-Math.atan2(1.6, PILOTIS_HEIGHT), 0, 0]}>
+              <boxGeometry args={[0.05, Math.sqrt(PILOTIS_HEIGHT ** 2 + 1.6 ** 2), 0.15]} />
+              <meshStandardMaterial color={steelGold} metalness={0.8} />
+            </mesh>
+          </group>
+        </group>
+      )}
+
+      <group position={[0, raise, 0]}>
+      {/* 1. FOUNDATION & PILOTIS / DECK BASE */}
+      {showFoundation && (
+        <group position={[0, 0, 0]}>
+          {/* Concrete Footing Grid under soil (apenas quando no solo sem pilotis) */}
+          {!hasSubsolo &&
+            [-w / 2 + 0.5, 0, w / 2 - 0.5].map((x, xi) =>
+              [-l / 2 + 0.5, 0, l / 2 - 0.5, l / 2 + 2.0].map((z, zi) => (
+                <group key={`fnd-${xi}-${zi}`} position={[x, 0, z]}>
+                  <mesh position={[0, -0.3, 0]} castShadow>
+                    <boxGeometry args={[0.8, 0.5, 0.8]} />
+                    <meshStandardMaterial color={concreteColor} roughness={0.9} wireframe={wireframe} />
+                  </mesh>
+                  <mesh position={[0, 0.02, 0]}>
+                    <boxGeometry args={[0.35, 0.04, 0.35]} />
+                    <meshStandardMaterial color={steelGold} wireframe={wireframe} />
+                  </mesh>
+                </group>
+              ))
+            )}
 
           {/* Front Elevated Outdoor Pool & Deck Structure */}
           <group position={[0, 0, l / 2 + 1.2]}>
