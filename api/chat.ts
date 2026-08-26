@@ -1,4 +1,8 @@
-import { getChatReply, type ChatHistoryItem } from "./_lib/chat";
+// Vercel's Node runtime resolves this via Node's native ESM loader (it does
+// not bundle api/*.ts into one file), which requires an explicit extension
+// on relative imports — ".ts" source, but the specifier must say ".js"
+// (confirmed live: omitting it threw ERR_MODULE_NOT_FOUND in production).
+import { getChatReply, type ChatHistoryItem } from "./_lib/chat.js";
 
 // Vercel Serverless Function — this is what actually answers /api/chat when
 // the site is deployed (rtengenharia.vercel.app runs as a static Vite build,
