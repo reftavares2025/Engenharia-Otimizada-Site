@@ -19,6 +19,7 @@ import {
   Wrench
 } from 'lucide-react';
 import { buildWhatsAppLink } from '../utils/whatsapp';
+import { captureLeadSilently } from '../utils/leadCapture';
 
 interface ConsultationModalProps {
   isOpen: boolean;
@@ -170,7 +171,20 @@ export const ConsultationModal: React.FC<ConsultationModalProps> = ({ isOpen, on
       (notes ? `📝 *Observações / Detalhes do Local:* ${notes}\n\n` : '') +
       `Olá Eng. Régis Tavares! Gostaria de agendar esta Visita Técnica Presencial para avaliarmos meu terreno e definirmos a viabilidade construtiva (Pré-Fabricado x Estrutura Metálica).`;
 
-    const waUrl = `https://wa.me/5515998606403?text=${encodeURIComponent(formattedMessage)}`;
+    // Capture lead silently in background
+    captureLeadSilently({
+      nome: clientName,
+      telefone: clientPhone,
+      cidade: clientCity,
+      tipoProjeto: projectType,
+      canal: 'Modal Visita Técnica Presencial',
+      terreno: `Checklist: ${selectedChecklist.join(', ')} | Data: ${selectedDay} (${selectedTime})`
+    });
+
+    const waUrl = buildWhatsAppLink(
+      `Visita Técnica: ${projectType} (${clientCity || 'SP/PR'})`,
+      formattedMessage
+    );
 
     setIsSubmitted(true);
     window.open(waUrl, '_blank');

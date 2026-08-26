@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, Send, User, Sparkles, MessageSquare, ShieldCheck, MapPin, CheckCircle, RefreshCw, Layers, CheckCircle2, ChevronRight, AlertTriangle, Box, Phone, Mail, Lock } from 'lucide-react';
+import { Bot, Send, User, Sparkles, MessageSquare, ShieldCheck, MapPin, CheckCircle, RefreshCw, Layers, CheckCircle2, ChevronRight, AlertTriangle, Box, Phone, Mail, Lock, Flame } from 'lucide-react';
 import { Project3DViewer, Project3DParams } from './Project3DViewer';
 import { buildWhatsAppLink } from '../utils/whatsapp';
+import { calculateLeadScore, captureLeadSilently } from '../utils/leadCapture';
 
 interface ChatStep {
   id: string;
@@ -19,16 +20,16 @@ export const BotQualification: React.FC = () => {
     projectType: 'chalé',
     city: 'Angatuba - SP',
     areaM2: 60,
-    hasLand: 'Sim, terreno próprio',
-    hasArchitectural: 'Não, preciso criar do zero',
+    hasLand: 'Sim, próprio',
+    hasArchitectural: 'Não, criar do zero',
     isApproved: 'Ainda não',
-    bedrooms: '2 quartos',
+    bedrooms: '2 Quartos',
     hasGourmet: true,
     hasChurrasqueira: true,
     hasGarage: false,
     hasSubsolo: false,
     hasMezzanine: true,
-    hasSondagemSPT: 'Ainda não possuo a sondagem',
+    hasSondagemSPT: 'Não, orçar junto',
   });
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -52,6 +53,17 @@ export const BotQualification: React.FC = () => {
     setContactTouched(true);
     if (!isContactValid) return;
     setContactSubmitted(true);
+
+    // Save lead in background immediately (even before finishing questions)
+    captureLeadSilently({
+      nome: contact.nome,
+      telefone: contact.telefone,
+      email: contact.email,
+      cidade: params.city,
+      tipoProjeto: params.projectType,
+      areaM2: params.areaM2,
+      canal: 'Bot Qualificação - Contato Inicial'
+    });
   };
 
   const steps: ChatStep[] = [
@@ -181,15 +193,32 @@ export const BotQualification: React.FC = () => {
   const handleSelectOption = (value: any) => {
     if (!currentStep) return;
 
-    setParams((prev) => ({
-      ...prev,
+    const updatedParams = {
+      ...params,
       [currentStep.field]: value,
-    }));
+    };
+    setParams(updatedParams);
 
     if (currentStepIndex < activeSteps.length - 1) {
       setCurrentStepIndex((prev) => prev + 1);
     } else {
       setIsCompleted(true);
+      // Dispatch full lead with calculated score in background
+      captureLeadSilently({
+        nome: contact.nome,
+        telefone: contact.telefone,
+        email: contact.email,
+        cidade: updatedParams.city,
+        tipoProjeto: updatedParams.projectType,
+        areaM2: updatedParams.areaM2,
+        terreno: updatedParams.hasLand,
+        aprovacao: updatedParams.isApproved,
+        sondagemSPT: updatedParams.hasSondagemSPT,
+        quartos: updatedParams.bedrooms,
+        mezanino: updatedParams.hasMezzanine,
+        temSubsolo: updatedParams.hasSubsolo,
+        canal: 'Bot Qualificação 3D'
+      });
     }
   };
 
@@ -423,70 +452,121 @@ export const BotQualification: React.FC = () => {
             </div>
           ) : (
             /* COMPLETED RESULT: GENERATED 3D VISUALIZER */
-            <div className="p-6 sm:p-8 space-y-6">
-              <div className="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center gap-3 text-emerald-300">
-                <CheckCircle2 className="w-6 h-6 flex-shrink-0" />
-                <div>
-                  <h4 className="font-bold text-sm uppercase tracking-wider">
-                    Eng(a). Olívia gerou seu Pré-Projeto e Análise Estrutural 3D!
-                  </h4>
-                  <p className="text-xs text-slate-300">
-                    O modelo interativo abaixo foi calculado para a cidade de <strong className="text-white">{params.city}</strong> ({params.areaM2}m²).
-                  </p>
+            (() => {
+              const leadScore = calculateLeadScore({
+                terreno: params.hasLand,
+                aprovacao: params.isApproved,
+                cidade: params.city,
+                sondagemSPT: params.hasSondagemSPT,
+              });
+
+              const formattedWhatsAppText =
+                `*${leadScore.tag} (Pontuação: ${leadScore.score}/10)*\n` +
+                `_${leadScore.recommendation}_\n\n` +
+                `📋 *RESUMO DO PRÉ-PROJETO TÉCNICO (ENGª OLÍVIA):*\n` +
+                `• *Cliente:* ${contact.nome}\n` +
+                `• *WhatsApp:* ${contact.telefone}\n` +
+                `• *E-mail:* ${contact.email || 'Não informado'}\n` +
+                `• *Tipo de Obra:* ${params.projectType}\n` +
+                `• *Cidade da Obra:* ${params.city}\n` +
+                `• *Metragem Estimada:* ${params.areaM2} m²\n` +
+                `• *Possui Terreno:* ${params.hasLand}\n` +
+                `• *Projeto Arquitetônico:* ${params.hasArchitectural}\n` +
+                `• *Aprovação Prefeitura:* ${params.isApproved}\n` +
+                `• *Sondagem SPT:* ${params.hasSondagemSPT}\n` +
+                (params.bedrooms ? `• *Quartos:* ${params.bedrooms}\n` : '') +
+                (params.hasMezzanine ? `• *Mezanino Cênico:* Sim\n` : '') +
+                (params.hasSubsolo ? `• *Pilotis / Elevação:* Sim\n` : '') +
+                `\nOlá Eng. Régis Tavares! Acabei de qualificar meu projeto na Engenharia Otimizada e gostaria de atendimento técnico!`;
+
+              return (
+                <div className="p-6 sm:p-8 space-y-6">
+                  {/* Lead Scoring Badge Header */}
+                  <div className={`p-4 rounded-2xl border flex items-center justify-between gap-3 ${
+                    leadScore.score >= 7
+                      ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                      : leadScore.score >= 4
+                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                      : 'bg-sky-500/15 border-sky-500/40 text-sky-300'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-900 border border-white/10 flex items-center justify-center text-lg">
+                        {leadScore.level.includes('QUENTE') ? '🔥' : leadScore.level.includes('MORNO') ? '🟡' : '🧊'}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-sm uppercase tracking-wider text-white">
+                            Pré-Projeto Qualificado • {leadScore.level}
+                          </h4>
+                          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-white border border-white/10">
+                            Score: {leadScore.score}/10
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-300">
+                          {leadScore.recommendation}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3D Interactive Component */}
+                  <Project3DViewer
+                    params={{
+                      ...params,
+                      clientName: contact.nome,
+                      clientPhone: contact.telefone,
+                      clientEmail: contact.email
+                    }}
+                  />
+
+                  {/* Summary Cards */}
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                    <div className="p-3.5 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
+                      <span className="text-slate-400 font-mono">Tipo de Obra</span>
+                      <div className="font-bold text-white uppercase">{params.projectType}</div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
+                      <span className="text-slate-400 font-mono">Local da Obra</span>
+                      <div className="font-bold text-white">{params.city}</div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
+                      <span className="text-slate-400 font-mono">Terreno</span>
+                      <div className="font-bold text-emerald-300">{params.hasLand}</div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
+                      <span className="text-slate-400 font-mono">Sondagem SPT</span>
+                      <div className="font-bold text-amber-300">{params.hasSondagemSPT}</div>
+                    </div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
+                    <button
+                      onClick={resetWizard}
+                      className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition-colors border border-white/15"
+                    >
+                      Refazer Pré-Projeto 3D
+                    </button>
+
+                    <a
+                      href={buildWhatsAppLink(
+                        `${leadScore.tag} - ${params.projectType} (${params.areaM2}m²)`,
+                        formattedWhatsAppText
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider px-8 py-4 rounded-2xl transition-all shadow-xl shadow-emerald-900/30 flex items-center justify-center gap-3 border border-emerald-300 transform hover:-translate-y-0.5"
+                    >
+                      <Send className="w-4 h-4 text-slate-950 fill-current" />
+                      <span>Enviar Pré-Projeto Qualificado no WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
-              </div>
-
-              {/* 3D Interactive Component */}
-              <Project3DViewer
-                params={{
-                  ...params,
-                  clientName: contact.nome,
-                  clientPhone: contact.telefone,
-                  clientEmail: contact.email
-                }}
-              />
-
-              {/* Summary Cards */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-                <div className="p-4 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
-                  <span className="text-slate-400 font-mono">Tipo de Obra</span>
-                  <div className="font-bold text-white uppercase">{params.projectType}</div>
-                </div>
-
-                <div className="p-4 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
-                  <span className="text-slate-400 font-mono">Localização da Obra</span>
-                  <div className="font-bold text-white">{params.city}</div>
-                </div>
-
-                <div className="p-4 bg-slate-900 border border-white/10 rounded-2xl space-y-1">
-                  <span className="text-slate-400 font-mono">Sondagem SPT (Fundação)</span>
-                  <div className="font-bold text-amber-300">{params.hasSondagemSPT}</div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10">
-                <button
-                  onClick={resetWizard}
-                  className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs transition-colors border border-white/15"
-                >
-                  Refazer Pré-Projeto 3D
-                </button>
-
-                <a
-                  href={buildWhatsAppLink(
-                    `Envio de Pré-Projeto Técnico - ${params.projectType} (${params.areaM2}m²)`,
-                    `Resumo do Pré-Projeto criado com a Enga. Olívia:\n\n• Nome: ${contact.nome}\n• Telefone: ${contact.telefone}\n• E-mail: ${contact.email}\n\n• Tipo de Obra: ${params.projectType}\n• Cidade/Local: ${params.city}\n• Metragem: ${params.areaM2}m²\n• Possui Terreno: ${params.hasLand}\n• Projeto Arquitetônico: ${params.hasArchitectural}\n• Quartos: ${params.bedrooms}\n• Mezanino: ${params.hasMezzanine ? 'Sim' : 'Não'}\n• Sondagem SPT: ${params.hasSondagemSPT}\n\nOlá Eng. Régis Tavares! Acabei de definir meu pré-projeto com a Olívia e gostaria que sua equipe de Engenheiros analise para darmos andamento ao orçamento!`
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-extrabold text-xs uppercase tracking-wider px-8 py-4 rounded-2xl transition-all shadow-xl shadow-emerald-900/30 flex items-center justify-center gap-3 border border-emerald-300 transform hover:-translate-y-0.5"
-                >
-                  <Send className="w-4 h-4 text-slate-950 fill-current" />
-                  <span>Enviar Pré-Projeto para Equipe de Engenheiros</span>
-                </a>
-              </div>
-            </div>
+              );
+            })()
           )}
 
         </div>
