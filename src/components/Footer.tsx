@@ -3,7 +3,17 @@ import { BrandLogo } from './BrandLogo';
 import { MessageSquare, MapPin, ShieldCheck, Phone, Heart } from 'lucide-react';
 import { buildWhatsAppLink } from '../utils/whatsapp';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onSelectPage?: (pageId: string) => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onSelectPage }) => {
+  const nav = (e: React.MouseEvent, pageId: string) => {
+    if (!onSelectPage) return;
+    e.preventDefault();
+    onSelectPage(pageId);
+  };
+
   const whatsappUrl = buildWhatsAppLink(
     'Contato Rodapé do Site',
     'Olá Eng. Régis Tavares! Estou navegando pelo site da Régis Tavares Engenharia Civil e gostaria de solicitar um orçamento.'
@@ -33,13 +43,13 @@ export const Footer: React.FC = () => {
               Navegação
             </h4>
             <ul className="space-y-2 text-slate-300 font-normal">
-              <li><a href="#inicio" className="hover:text-amber-300 transition-colors">Início</a></li>
-              <li><a href="#pre-fabricados" className="hover:text-amber-300 transition-colors">Estruturas Pré-Fabricadas</a></li>
-              <li><a href="#chales" className="hover:text-amber-300 transition-colors">Chalés em Estrutura Metálica</a></li>
-              <li><a href="#projetos" className="hover:text-amber-300 transition-colors">Projetos & Portfólio</a></li>
-              <li><a href="#assistente-ia" className="hover:text-amber-300 transition-colors">Eng(a). Olívia • Visualizador 3D</a></li>
-              <li><a href="#calculadora" className="hover:text-amber-300 transition-colors">Simulador de Custos</a></li>
-              <li><a href="#faq" className="hover:text-amber-300 transition-colors">Perguntas Frequentes (FAQ)</a></li>
+              <li><a href="/" onClick={(e) => nav(e, 'inicio')} className="hover:text-amber-300 transition-colors">Início</a></li>
+              <li><a href="/pre-fabricados" onClick={(e) => nav(e, 'pre-fabricados')} className="hover:text-amber-300 transition-colors">Estruturas Pré-Fabricadas</a></li>
+              <li><a href="/chales" onClick={(e) => nav(e, 'chales')} className="hover:text-amber-300 transition-colors">Chalés em Estrutura Metálica</a></li>
+              <li><a href="/projetos" onClick={(e) => nav(e, 'projetos')} className="hover:text-amber-300 transition-colors">Projetos & Portfólio</a></li>
+              <li><a href="/assistente-ia" onClick={(e) => nav(e, 'assistente-ia')} className="hover:text-amber-300 transition-colors">Eng(a). Olívia • Visualizador 3D</a></li>
+              <li><a href="/calculadora" onClick={(e) => nav(e, 'calculadora')} className="hover:text-amber-300 transition-colors">Simulador de Custos</a></li>
+              <li><a href="/faq" onClick={(e) => nav(e, 'faq')} className="hover:text-amber-300 transition-colors">Perguntas Frequentes (FAQ)</a></li>
             </ul>
           </div>
 

@@ -4,7 +4,11 @@ import { buildWhatsAppLink } from '../utils/whatsapp';
 import { APP_IMAGES } from '../assets/images';
 import { LazyImage } from './LazyImage';
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  onSelectPage?: (pageId: string) => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ onSelectPage }) => {
   const primaryWhatsappUrl = buildWhatsAppLink(
     'Solicitação de Orçamento - Pré-Fabricados & Chalés',
     'Gostaria de solicitar um orçamento diretamente com o Eng. Régis Tavares para minha obra em São Paulo / Paraná.'
@@ -64,7 +68,12 @@ export const Hero: React.FC = () => {
               </a>
 
               <a
-                href="#assistente-ia"
+                href="/assistente-ia"
+                onClick={(e) => {
+                  if (!onSelectPage) return;
+                  e.preventDefault();
+                  onSelectPage('assistente-ia');
+                }}
                 className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-slate-100 border border-white/20 font-bold text-sm uppercase tracking-wider px-6 py-4 rounded-xl transition-all"
               >
                 <Bot className="w-5 h-5 text-sky-400" />

@@ -33,41 +33,105 @@ export type PageId =
   | 'faq'
   | 'contato';
 
+const VALID_PAGES: PageId[] = [
+  'inicio',
+  'pre-fabricados',
+  'chales',
+  'fluxo-de-projeto',
+  'projetos',
+  'assistente-ia',
+  'calculadora',
+  'parceiros',
+  'faq',
+  'contato'
+];
+
+// One <title> + meta description per page, so each real URL below is
+// distinguishable to Google instead of every route sharing the homepage's tags.
+const PAGE_META: Record<PageId, { title: string; description: string }> = {
+  'inicio': {
+    title: 'Régis Tavares | Engenharia Otimizada, Pré-Fabricados e Chalés de Luxo em Angatuba-SP',
+    description: 'Régis Tavares Engenharia Civil - Fabricação própria de pré-fabricados, chalés em aço, projetos arquitetônicos personalizados e estruturais com atendimento em SP e PR. Cobrimos qualquer orçamento coerente!'
+  },
+  'pre-fabricados': {
+    title: 'Pré-Fabricados de Concreto & Galpões Logísticos | Régis Tavares Engenharia',
+    description: 'Estruturas e painéis alveolares verticais em concreto usinado Fck 35-50 MPa. Agilidade, alta resistência e redução do custo por m².'
+  },
+  'chales': {
+    title: 'Chalés em Estrutura Metálica & Steel Frame | Régis Tavares Engenharia',
+    description: 'Projeto e montagem de chalés A-Frame e Alpinos para terrenos rurais, inclinações e turismo. Liberdade total para comprar o aço onde desejar.'
+  },
+  'fluxo-de-projeto': {
+    title: 'Fluxo da Obra & Viabilidade Técnica | Régis Tavares Engenharia',
+    description: 'Conheça o processo de engenharia passo a passo: da visita técnica presencial até a entrega final no canteiro.'
+  },
+  'projetos': {
+    title: 'Portfólio de Obras & Modelos 3D | Régis Tavares Engenharia',
+    description: 'Projetos executados e renderizações de galpões logísticos, edifícios comerciais, chalés metálicos e estruturas de grande vão.'
+  },
+  'assistente-ia': {
+    title: 'Assistente Técnica Engª. Olívia & Simulador 3D | Régis Tavares Engenharia',
+    description: 'Responda às perguntas para gerar em tempo real o modelo tridimensional interativo da sua obra com estimativa de aço NBR 8800.'
+  },
+  'calculadora': {
+    title: 'Simulador de Custos & Prazos | Régis Tavares Engenharia',
+    description: 'Monte a estimativa otimizada da sua obra selecionando área, tipo de construção e cidade para envio direto ao Eng. Régis Tavares.'
+  },
+  'parceiros': {
+    title: 'Parceiros, Usinas & Fornecedores de Elite | Régis Tavares Engenharia',
+    description: 'Insumos de aço, concreto usinado e sistemas de ancoragem com rastreabilidade, laudos de fábrica e certificação ABNT.'
+  },
+  'faq': {
+    title: 'Perguntas Frequentes & Dúvidas Técnicas (FAQ) | Régis Tavares Engenharia',
+    description: 'Respostas detalhadas sobre regulamentação municipal, ART, sondagem de solo, prazos de pré-fabricados e orçamento.'
+  },
+  'contato': {
+    title: 'Contato Direto com a Engenharia & Localização | Régis Tavares Engenharia',
+    description: 'Fale diretamente com o Eng. Régis Tavares. Fábrica em Angatuba-SP com atendimento em São Paulo, Paraná e projetos para todo o Brasil.'
+  }
+};
+
+function pathFromPage(pageId: PageId): string {
+  return pageId === 'inicio' ? '/' : `/${pageId}`;
+}
+
+function pageFromPath(pathname: string): PageId {
+  const clean = pathname.replace(/^\/+|\/+$/g, '');
+  return clean && (VALID_PAGES as string[]).includes(clean) ? (clean as PageId) : 'inicio';
+}
+
 export default function App() {
-  const [activePage, setActivePage] = useState<PageId>('inicio');
+  const [activePage, setActivePage] = useState<PageId>(() =>
+    typeof window !== 'undefined' ? pageFromPath(window.location.pathname) : 'inicio'
+  );
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
 
-  // Sync state with URL Hash for shareability & back/forward browser support
+  // Sync state with the real URL path (not a #hash) so each page is a
+  // distinct, crawlable/indexable URL — back/forward still works via popstate.
   useEffect(() => {
-    const handleHashChange = () => {
-      const rawHash = window.location.hash.replace('#', '').trim();
-      const validPages: PageId[] = [
-        'inicio',
-        'pre-fabricados',
-        'chales',
-        'fluxo-de-projeto',
-        'projetos',
-        'assistente-ia',
-        'calculadora',
-        'parceiros',
-        'faq',
-        'contato'
-      ];
-
-      if (rawHash && validPages.includes(rawHash as PageId)) {
-        setActivePage(rawHash as PageId);
-      }
+    const handlePopState = () => {
+      setActivePage(pageFromPath(window.location.pathname));
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  // Keep <title> and the meta description in sync with the active page, so
+  // Google sees distinct, relevant tags per URL instead of one shared set.
+  useEffect(() => {
+    const meta = PAGE_META[activePage];
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', meta.description);
+    document
+      .querySelector('link[rel="canonical"]')
+      ?.setAttribute('href', `https://rtengenharia.vercel.app${pathFromPage(activePage)}`);
+  }, [activePage]);
+
   const handleSelectPage = (pageId: string) => {
-    const target = pageId as PageId;
+    const target = (VALID_PAGES as string[]).includes(pageId) ? (pageId as PageId) : 'inicio';
     setActivePage(target);
-    window.location.hash = `#${target}`;
+    window.history.pushState({}, '', pathFromPage(target));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -95,7 +159,7 @@ export default function App() {
         {activePage === 'inicio' && (
           <div className="space-y-0 animate-in fade-in duration-300">
             {/* 1. Hero Section */}
-            <Hero />
+            <Hero onSelectPage={handleSelectPage} />
 
             {/* Technical Authority & Credibility Bar */}
             <TechnicalCredibility onOpenConsultation={handleOpenConsultation} />
@@ -336,7 +400,7 @@ export default function App() {
       />
 
       {/* Civil Engineering Footer */}
-      <Footer />
+      <Footer onSelectPage={handleSelectPage} />
     </div>
   );
 }
