@@ -135,11 +135,11 @@ export async function captureLeadSilently(data: LeadData): Promise<void> {
     console.warn('Local lead storage error:', err);
   }
 
-  // 2. Dispatch to Google Sheets Webhook (if configured)
+  // 2. Dispatch to Google Sheets Webhook
   const webhookUrl =
     (import.meta as any).env?.VITE_GOOGLE_SHEETS_WEBHOOK_URL ||
     (window as any).__RT_GOOGLE_SHEETS_URL__ ||
-    '';
+    'https://script.google.com/macros/s/AKfycbyYpQoX34_oatVaGDB82AqFynlZoEE0rgrulHHpQEuDjc9Z4lDW0mW_e7oXcRASpLEr/exec';
 
   if (webhookUrl && webhookUrl.startsWith('http')) {
     try {
