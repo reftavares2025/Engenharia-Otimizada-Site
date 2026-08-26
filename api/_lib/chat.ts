@@ -44,21 +44,48 @@ export async function getChatReply(
   message: string,
   history: ChatHistoryItem[] = []
 ): Promise<ChatResult> {
-  const apiKey = "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";
+  const apiKey = process.env.GROQ_API_KEY || process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    console.warn("GROQ_API_KEY not configured. Falling back to local offline responses.");
+    return {
+      reply: "Olá! Para receber um orçamento detalhado e atendimento prioritário com o Eng. Régis Tavares, clique no botão do WhatsApp abaixo!",
+      recommendedAction: "whatsapp"
+    };
+  }
+
+  // 1. Sanitize & trim inputs (Protection against oversized payloads / prompt stuffing)
+  const cleanMessage = String(message || '').trim().slice(0, 800);
+  if (!cleanMessage) {
+    return {
+      reply: "Como posso ajudar com o seu projeto de engenharia ou chalé hoje?",
+      recommendedAction: "whatsapp"
+    };
+  }
 
   const messages: Array<{ role: string; content: string }> = [
     { role: "system", content: SYSTEM_INSTRUCTION }
   ];
   
-  history.forEach((item) => {
-    messages.push({
-      role: item.sender === "user" ? "user" : "assistant",
-      content: item.text,
+  // 2. Validate and limit history to the last 6 messages
+  if (Array.isArray(history)) {
+    const recentHistory = history.slice(-6);
+    recentHistory.forEach((item) => {
+      if (item && typeof item.text === 'string') {
+        messages.push({
+          role: item.sender === "user" ? "user" : "assistant",
+          content: item.text.trim().slice(0, 500),
+        });
+      }
     });
-  });
-  messages.push({ role: "user", content: message });
+  }
+
+  messages.push({ role: "user", content: cleanMessage });
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s timeout
+
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -68,24 +95,30 @@ export async function getChatReply(
       body: JSON.stringify({
         model: "qwen-2.5-coder-32b",
         messages: messages,
-        temperature: 0.7,
+        temperature: 0.6,
+        max_tokens: 600
       }),
+      signal: controller.signal
     });
 
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
-      throw new Error(`Groq API error: ${response.statusText}`);
+      throw new Error(`Groq API returned ${response.status}: ${response.statusText}`);
     }
 
     const data = await response.json();
-    const replyText = data.choices?.[0]?.message?.content ||
+    const rawReply = data.choices?.[0]?.message?.content || "";
+    // 3. Trim API output
+    const replyText = rawReply.trim() ||
       "Desculpe, ocorreu uma instabilidade momentânea. Clique no botão abaixo para falar no WhatsApp com nossos engenheiros!";
 
     return { reply: replyText, recommendedAction: "whatsapp" };
   } catch (err) {
-    console.error("Erro na API /api/chat:", err);
+    console.error("Erro seguro na API /api/chat:", err);
     return {
       reply:
-        "Tivemos um pequeno problema na resposta automática, mas você pode chamar o Eng. Régis Tavares diretamente clicando no botão do WhatsApp!",
+        "Tivemos um pequeno problema momentâneo na resposta automática, mas você pode falar diretamente com o Eng. Régis Tavares clicando no botão do WhatsApp!",
       recommendedAction: "whatsapp",
       errorStatus: 500,
     };
