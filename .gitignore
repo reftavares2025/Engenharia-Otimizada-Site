@@ -9,3 +9,7 @@ coverage/
 
 .vercel
 .env*
+
+# Staging folder for photos/renders being considered for the site —
+# not part of the build, kept local only.
+/RENDER
