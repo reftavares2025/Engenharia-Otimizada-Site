@@ -65,8 +65,7 @@ export const PROJECT_GALLERY: ProjectImage[] = [
     imageUrl: APP_IMAGES.obraRealGalpaoAereo,
     description: 'Galpão em concreto pré-fabricado entregue e em operação, com fechamento de fachada em painéis e faixa de ventilação superior. Vista aérea da obra concluída.',
     specs: ['Obra Real Entregue', 'Fachada em Painéis Pré-Fabricados', 'Faixa de Ventilação Superior'],
-    isRealPhoto: true,
-    brandCredit: 'Fabricação RBR Pré-Fabricados · Execução JVR Construtora'
+    isRealPhoto: true
   },
   {
     id: 'proj-8',
@@ -76,28 +75,7 @@ export const PROJECT_GALLERY: ProjectImage[] = [
     imageUrl: APP_IMAGES.obraRealEdificioComercialAereo,
     description: 'Edifício comercial de dois pavimentos em estrutura pré-fabricada, térreo em pilotis e fachada mista, entregue em área urbana consolidada. Vista aérea da obra concluída.',
     specs: ['Obra Real Entregue', 'Térreo em Pilotis', 'Fachada Mista Concreto e Vidro'],
-    isRealPhoto: true,
-    brandCredit: 'Fabricação RBR Pré-Fabricados · Execução JVR Construtora'
-  },
-  {
-    id: 'proj-9',
-    title: 'Estrutura Pré-Fabricada em Fase de Montagem',
-    category: 'pre-fabricado',
-    categoryLabel: 'Pré-Fabricado de Concreto',
-    imageUrl: APP_IMAGES.obraRealEstruturaMontagem,
-    description: 'Esqueleto estrutural em concreto pré-fabricado durante a fase de montagem — pilares, vigas e laje já erguidos, evidenciando a agilidade do sistema pré-fabricado frente à alvenaria convencional.',
-    specs: ['Obra em Andamento', 'Montagem Rápida de Pilares e Vigas', 'Acompanhamento Técnico Presencial'],
-    isRealPhoto: true,
-    brandCredit: 'Fabricação RBR Pré-Fabricados · Execução JVR Construtora'
-  },
-  {
-    id: 'proj-10',
-    title: 'Pré-Projeto Estrutural em Terreno Rural',
-    category: 'pre-fabricado',
-    categoryLabel: 'Pré-Fabricado de Concreto',
-    imageUrl: APP_IMAGES.renderPreProjetoTerreno,
-    description: 'Renderização de pré-projeto para estrutura pré-fabricada de múltiplos pavimentos em terreno rural, ainda na fase de estudo de viabilidade antes da fabricação.',
-    specs: ['Pré-Projeto / Estudo de Viabilidade', 'Estrutura de Múltiplos Pavimentos', 'Fabricação RBR Pré-Fabricados']
+    isRealPhoto: true
   },
   {
     id: 'proj-11',
