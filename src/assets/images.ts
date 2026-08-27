@@ -6,6 +6,13 @@ import galpaoLogistico from './images/galpao_logistico_1786618148041.jpg';
 import complexoIndustrial from './images/complexo_industrial_misto_1786618181242.jpg';
 import logoSvg from './logo.svg';
 
+// Real jobsite photos and pré-projeto renders (obras RBR Pré-Fabricados / JVR Construtora)
+import obraRealGalpaoAereo from './images/obra_real_galpao_aereo.jpg';
+import obraRealEdificioComercialAereo from './images/obra_real_edificio_comercial_aereo.jpg';
+import obraRealEstruturaMontagem from './images/obra_real_estrutura_montagem.jpg';
+import renderPreProjetoTerreno from './images/render_pre_projeto_terreno.jpg';
+import chaleFlutuanteSteelFrame from './images/chale_flutuante_steel_frame.jpg';
+
 export const APP_IMAGES = {
   chaleAframe,
   chaleAlpino,
@@ -13,5 +20,10 @@ export const APP_IMAGES = {
   estruturaMetalica,
   galpaoLogistico,
   complexoIndustrial,
+  obraRealGalpaoAereo,
+  obraRealEdificioComercialAereo,
+  obraRealEstruturaMontagem,
+  renderPreProjetoTerreno,
+  chaleFlutuanteSteelFrame,
   logo: logoSvg,
 };

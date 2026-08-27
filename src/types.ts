@@ -16,6 +16,10 @@ export interface ProjectImage {
   description: string;
   location?: string;
   specs: string[];
+  /** True for an actual jobsite photo (drone/ground), as opposed to a 3D render. */
+  isRealPhoto?: boolean;
+  /** Who executed the physical work, when different from the rendering studio — shown as credit. */
+  brandCredit?: string;
 }
 
 export interface ChatMessage {

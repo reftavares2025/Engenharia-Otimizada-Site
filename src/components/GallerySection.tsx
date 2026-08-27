@@ -193,6 +193,12 @@ export const GallerySection: React.FC = () => {
                       <span className="absolute top-3 left-3 z-10 bg-slate-950/80 text-white text-[9px] font-mono font-extrabold px-2.5 py-1 rounded uppercase tracking-widest backdrop-blur-md border border-white/10">
                         {project.categoryLabel}
                       </span>
+                      {project.isRealPhoto && (
+                        <span className="absolute top-3 right-3 z-10 bg-emerald-500 text-slate-950 text-[9px] font-mono font-extrabold px-2.5 py-1 rounded uppercase tracking-widest flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          <span>Obra Real</span>
+                        </span>
+                      )}
                     </LazyImage>
 
                     <div className="p-6 space-y-3">
@@ -203,6 +209,12 @@ export const GallerySection: React.FC = () => {
                       <p className="text-xs text-slate-300 leading-relaxed line-clamp-2 font-normal">
                         {project.description}
                       </p>
+
+                      {project.brandCredit && (
+                        <p className="text-[10px] text-emerald-400 font-mono font-bold uppercase tracking-wide">
+                          {project.brandCredit}
+                        </p>
+                      )}
 
                       <div className="pt-2 flex flex-wrap gap-1.5">
                         {project.specs.map((spec, idx) => (
@@ -218,14 +230,16 @@ export const GallerySection: React.FC = () => {
                   </div>
 
                   <div className="px-6 pb-6 pt-2 space-y-2">
-                    {/* 3D Inspection Quick Trigger */}
-                    <button
-                      onClick={() => handleOpen3DDirect(model3DId)}
-                      className="w-full inline-flex items-center justify-center gap-2 bg-amber-500/20 hover:bg-amber-500 hover:text-slate-950 text-amber-300 text-xs font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all border border-amber-500/30"
-                    >
-                      <Box className="w-3.5 h-3.5" />
-                      <span>Inspecionar em 3D Real</span>
-                    </button>
+                    {/* 3D Inspection Quick Trigger — only for renders, a real photo has no matching 3D twin */}
+                    {!project.isRealPhoto && (
+                      <button
+                        onClick={() => handleOpen3DDirect(model3DId)}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-amber-500/20 hover:bg-amber-500 hover:text-slate-950 text-amber-300 text-xs font-bold uppercase tracking-wider py-2.5 rounded-xl transition-all border border-amber-500/30"
+                      >
+                        <Box className="w-3.5 h-3.5" />
+                        <span>Inspecionar em 3D Real</span>
+                      </button>
+                    )}
 
                     <a
                       href={getWhatsAppForProject(project)}
@@ -264,32 +278,39 @@ export const GallerySection: React.FC = () => {
                     <span className="text-[10px] font-mono text-slate-400 font-bold uppercase px-2">
                       Modo de Exibição:
                     </span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => setModalMode('2d')}
-                        className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all ${
-                          modalMode === '2d'
-                            ? 'bg-amber-500 text-slate-950'
-                            : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        Render 2D
-                      </button>
-                      <button
-                        onClick={() => setModalMode('3d')}
-                        className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all flex items-center gap-1 ${
-                          modalMode === '3d'
-                            ? 'bg-amber-500 text-slate-950'
-                            : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        <Box className="w-3.5 h-3.5" />
-                        <span>Modelo 3D</span>
-                      </button>
-                    </div>
+                    {selectedProject.isRealPhoto ? (
+                      <span className="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide">
+                        <Check className="w-3 h-3" />
+                        <span>Foto Real da Obra</span>
+                      </span>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setModalMode('2d')}
+                          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all ${
+                            modalMode === '2d'
+                              ? 'bg-amber-500 text-slate-950'
+                              : 'text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          Render 2D
+                        </button>
+                        <button
+                          onClick={() => setModalMode('3d')}
+                          className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-all flex items-center gap-1 ${
+                            modalMode === '3d'
+                              ? 'bg-amber-500 text-slate-950'
+                              : 'text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          <Box className="w-3.5 h-3.5" />
+                          <span>Modelo 3D</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  {modalMode === '2d' ? (
+                  {selectedProject.isRealPhoto || modalMode === '2d' ? (
                     <div className="w-full min-h-[300px] max-h-[450px] flex items-center justify-center p-2">
                       <LazyImage
                         src={selectedProject.imageUrl}
@@ -334,9 +355,17 @@ export const GallerySection: React.FC = () => {
                 {/* Specs and Details */}
                 <div className="md:col-span-5 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
-                    <span className="inline-block bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
-                      {selectedProject.categoryLabel}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-block bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+                        {selectedProject.categoryLabel}
+                      </span>
+                      {selectedProject.isRealPhoto && (
+                        <span className="inline-flex items-center gap-1 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+                          <Check className="w-3 h-3" />
+                          <span>Obra Real</span>
+                        </span>
+                      )}
+                    </div>
 
                     <h3 className="text-xl font-bold font-display text-white">
                       {selectedProject.title}
@@ -345,6 +374,12 @@ export const GallerySection: React.FC = () => {
                     <p className="text-xs text-slate-300 leading-relaxed">
                       {selectedProject.description}
                     </p>
+
+                    {selectedProject.brandCredit && (
+                      <p className="text-[11px] text-emerald-400 font-mono font-bold uppercase tracking-wide">
+                        {selectedProject.brandCredit}
+                      </p>
+                    )}
 
                     <div className="space-y-1.5 pt-2">
                       <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -362,17 +397,19 @@ export const GallerySection: React.FC = () => {
                   </div>
 
                   <div className="pt-4 border-t border-slate-800 space-y-2">
-                    <button
-                      onClick={() => {
-                        setSelected3DModel(mapProjectTo3DModel(selectedProject));
-                        setIs3DModalOpen(true);
-                        setSelectedProject(null);
-                      }}
-                      className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider py-3 rounded-xl transition-all shadow-md"
-                    >
-                      <Box className="w-4 h-4" />
-                      <span>Inspecionar Estrutura 3D em Tela Cheia</span>
-                    </button>
+                    {!selectedProject.isRealPhoto && (
+                      <button
+                        onClick={() => {
+                          setSelected3DModel(mapProjectTo3DModel(selectedProject));
+                          setIs3DModalOpen(true);
+                          setSelectedProject(null);
+                        }}
+                        className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold uppercase tracking-wider py-3 rounded-xl transition-all shadow-md"
+                      >
+                        <Box className="w-4 h-4" />
+                        <span>Inspecionar Estrutura 3D em Tela Cheia</span>
+                      </button>
+                    )}
 
                     <a
                       href={getWhatsAppForProject(selectedProject)}
